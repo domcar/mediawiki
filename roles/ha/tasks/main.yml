@@ -3,13 +3,6 @@
   apt: pkg=keepalived state=installed update_cache=true
 
 - name: copy keepalived conf in DB1
-  copy: src=roles/ha/files/keepalivedDB1.conf dest=/etc/keepalived/keepalived.conf force=no
+  template: src=keepalived.conf dest=/etc/keepalived/keepalived.conf
   notify:
-   - Restart keepalivedDB1
-  delegate_to: db1.example.com
-
-- name: copy keepalived conf in DB2
-  copy: src=roles/ha/files/keepalivedDB2.conf dest=/etc/keepalived/keepalived.conf force=no
-  notify:
-   - Restart keepalivedDB2
-  delegate_to: db2.example.com 
+    - Restart keepaliveDB1   
