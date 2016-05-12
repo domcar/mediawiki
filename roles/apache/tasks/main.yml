@@ -1,0 +1,72 @@
+---
+- name: Install Apache
+  apt: pkg={{ item }} state=installed update_cache=true
+  with_items:
+   - apache2
+   - libapache2-mod-php5
+  register: apacheinstalled
+  notify:
+    - Start Apache
+
+- name: Enable Rewrite
+  apache2_module: name=rewrite state=present
+
+- name: Install Php
+  apt: pkg={{ item }} state=installed update_cache=true
+  with_items:
+   - php5
+   - php5-mysql
+   - php-apc
+   - php5-intl
+   - php5-cli
+
+- name: Install Plugins
+  apt: pkg={{ item }} state=installed update_cache=true
+  with_items:
+   - imagemagick
+   - phpmyadmin
+   - vsftpd
+  register: PLUGINSinstalled
+  notify:
+    - Restart Apache
+
+# check if ssl module is loaded and if not, activate
+- stat: path=/etc/apache2/mods-enabled/ssl.load
+  register: ssl
+- name: Enable SSL
+  apache2_module: name=ssl state=present
+
+- stat: path=/etc/apache2/sites-enabled/default-ssl.conf
+  register: sslconf
+
+# create the default-ssl  
+- shell: a2ensite default-ssl
+  when: sslconf.stat.exists == False
+  notify: Restart Apache
+
+#- shell: rm /etc/apache2/sites-enabled/default-ssl.conf
+#  when: ssl.stat.exists == False
+#  notify: Restart Apache 
+
+# create ssl directory if not exists already
+- stat: path=/etc/apache2/ssl
+  register: directoryssl
+- name: Create Apache ssl Directory
+  when: directoryssl.stat.exists == False
+  command: mkdir -p /etc/apache2/ssl
+
+# create selfsigned Certificate if not exists already
+- stat: path=/etc/apache2/ssl/server.crt
+  register: certificate
+- name: Create SSL Cert
+  when: certificate.stat.exists == False
+  shell: openssl req -new -newkey rsa:2048 -days 1095 -nodes -x509 -keyout server.key -sha256 -subj '/C=DE/ST=Hessen/O=Frankfurt/OU=IT/CN=server.domenico/emailAddress=server@domenico.com' -out server.crt
+  args:
+   chdir: /etc/apache2/ssl 
+
+# copy the ssl.conf from template if not already copied
+- name: copy the ssl site
+  template: src=roles/apache/templates/default-ssl.conf.j2 dest=/etc/apache2/sites-enabled/default-ssl.conf force=yes
+  notify:
+   - Restart Apache
+

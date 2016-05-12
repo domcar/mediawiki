@@ -1,0 +1,40 @@
+---
+# Get the mediawiki tarball, untar, move 
+
+# remove index otherwise the mediawiki homepage does not start
+- stat: path=/var/www/html/index.html
+  register: index
+- name: Remove index.html
+  when: index.stat.exists == True
+  command: rm /var/www/html/index.html
+
+# create temp directory
+- stat: path=/tmp/mediawiki
+  register: directory
+- name: Create Directory
+  when: directory.stat.exists == False
+  command: mkdir -p /tmp/mediawiki
+
+# download the latest mediawiki tarball
+- stat: path=/tmp/mediawiki/mediawiki-stable.tgz
+  register: tarball
+- name: Get Mediawiki
+#  when: tarball.stat.exists == False
+#  get_url: url=https://releases.wikimedia.org/mediawiki/1.26/mediawiki-1.26.2.tar.gz dest=/tmp/mediawiki/mediawiki-stable.tgz force=yes
+  copy: src=roles/mediawiki/files/mediawiki-1.26.2.tar.gz dest=/tmp/mediawiki/mediawiki-stable.tgz force=no
+
+# untar the tarball
+- stat: path=/tmp/mediawiki/mediawiki-1.26.2
+  register: unpacked
+- name: Unpack tarball
+  when: unpacked.stat.exists == False
+  command: tar -xvzf /tmp/mediawiki/mediawiki-stable.tgz -C /tmp/mediawiki/
+
+# copy the contents in the web directory
+- stat: path=/var/www/html/README.mediawiki
+  register: readme
+- name: Move files
+  when: readme.stat.exists == False
+  shell: cp -r /tmp/mediawiki/mediawiki-1.26.2/* /var/www/html/
+
+

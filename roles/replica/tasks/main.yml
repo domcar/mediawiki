@@ -1,0 +1,60 @@
+---
+###### configuration on database1 #########
+- name: Check master on db2.example.com
+  mysql_replication: mode=getmaster
+  delegate_to: db2.example.com
+  register: master2
+
+- name: Stop replication.
+  mysql_replication: 
+    mode: stopslave
+    login_user: root
+    login_password: ciao
+  delegate_to: db1.example.com
+
+- name: Configure replication on the db1.example.com
+  mysql_replication:
+    mode: changemaster
+    master_host: "{{ db2IP }}"
+    master_user: replicator
+    master_password: ciao
+    master_log_file: "{{ master2.File }}"
+    master_log_pos: "{{ master2.Position }}"
+  delegate_to: db1.example.com
+
+- name: Start replication.
+  mysql_replication: mode=startslave
+  delegate_to: db1.example.com
+
+########configuration on database2 ###############
+- name: Check master on db1.example.com
+  mysql_replication: mode=getmaster
+  delegate_to: db1.example.com
+  register: master1
+
+- name: Stop replication.
+  mysql_replication: mode=stopslave
+  delegate_to: db2.example.com
+
+- name: Configure replication on the slave.example.com
+  mysql_replication:
+    mode: changemaster
+    master_host: "{{ db1IP }}"
+    master_user: replicator
+    master_password: ciao
+    master_log_file: "{{ master1.File }}"
+    master_log_pos: "{{ master1.Position }}"
+  delegate_to: db2.example.com
+
+- name: Start replication.
+  mysql_replication: mode=startslave
+  delegate_to: db2.example.com
+
+####################################
+#- name: check slave on db1
+#  mysql_replication: mode=getslave
+#  delegate_to: db1.example.com
+#  register: slave1
+
+#- name: show slave status on db1
+#  debug: msg=" {{ slave1.Slave_IO_Running }} "

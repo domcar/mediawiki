@@ -1,0 +1,10 @@
+---
+- include: mediawiki.yml
+
+- include: db1.yml
+
+- include: db2.yml
+
+- include: replica.yml
+
+- include: ha.yml

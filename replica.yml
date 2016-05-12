@@ -1,0 +1,9 @@
+---
+- hosts: db1.example.com
+  user: vagrant
+  sudo: yes
+  vars:
+   - db1IP: "{{ hostvars['db1.example.com']['ansible_eth1']['ipv4']['address'] }}"
+   - db2IP: "{{ hostvars['db2.example.com']['ansible_eth1']['ipv4']['address'] }}"
+  roles:
+   - replica
