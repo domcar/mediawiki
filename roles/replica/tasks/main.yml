@@ -1,54 +1,31 @@
 ---
-###### configuration on database1 #########
-- name: Check master on db2.example.com
+###### configuration on database #########
+- name: Check master
   mysql_replication: mode=getmaster
-  delegate_to: db2.example.com
-  register: master2
+  delegate_to: "{{ master }}"
+  register: master
 
 - name: Stop replication.
   mysql_replication: 
     mode: stopslave
     login_user: root
     login_password: ciao
-  delegate_to: db1.example.com
+  delegate_to: "{{ slave }}"
 
-- name: Configure replication on the db1.example.com
+# da qui in poi posso fare lo show slave status perché qua configuro il master;
+- name: Configure replication on the slave
   mysql_replication:
     mode: changemaster
-    master_host: "{{ db2IP }}"
-    master_user: replicator
+    master_host: "{{ masterIP }}"
+    master_user: replicator 
     master_password: ciao
-    master_log_file: "{{ master2.File }}"
-    master_log_pos: "{{ master2.Position }}"
-  delegate_to: db1.example.com
+    master_log_file: "{{ master.File }}"
+    master_log_pos: "{{ master.Position }}"
+  delegate_to: "{{ slave }}"
 
 - name: Start replication.
   mysql_replication: mode=startslave
-  delegate_to: db1.example.com
-
-########configuration on database2 ###############
-- name: Check master on db1.example.com
-  mysql_replication: mode=getmaster
-  delegate_to: db1.example.com
-  register: master1
-
-- name: Stop replication.
-  mysql_replication: mode=stopslave
-  delegate_to: db2.example.com
-
-- name: Configure replication on the slave.example.com
-  mysql_replication:
-    mode: changemaster
-    master_host: "{{ db1IP }}"
-    master_user: replicator
-    master_password: ciao
-    master_log_file: "{{ master1.File }}"
-    master_log_pos: "{{ master1.Position }}"
-  delegate_to: db2.example.com
-
-- name: Start replication.
-  mysql_replication: mode=startslave
-  delegate_to: db2.example.com
+  delegate_to: "{{ slave }}"
 
 ####################################
 #- name: check slave on db1

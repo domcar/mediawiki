@@ -1,9 +1,24 @@
 ---
+# the role replica will be run twice, with the master-slave relationship inverted to make master-master replication
 - hosts: db1.example.com
   user: vagrant
   sudo: yes
   vars:
-   - db1IP: "{{ hostvars['db1.example.com']['ansible_eth1']['ipv4']['address'] }}"
-   - db2IP: "{{ hostvars['db2.example.com']['ansible_eth1']['ipv4']['address'] }}"
+   - slaveIP: "{{ hostvars['db1.example.com']['ansible_eth1']['ipv4']['address'] }}"
+   - slave: db1.example.com
+   - masterIP: "{{ hostvars['db2.example.com']['ansible_eth1']['ipv4']['address'] }}"
+   - master: db2.example.com
   roles:
    - replica
+
+- hosts: db2.example.com
+  user: vagrant
+  sudo: yes
+  vars:
+   - masterIP: "{{ hostvars['db1.example.com']['ansible_eth1']['ipv4']['address'] }}"
+   - master: db1.example.com
+   - slaveIP: "{{ hostvars['db2.example.com']['ansible_eth1']['ipv4']['address'] }}"
+   - slave: db2.example.com
+  roles:
+   - replica
+

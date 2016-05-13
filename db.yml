@@ -1,0 +1,8 @@
+---
+- hosts: databases
+  user: vagrant
+  sudo: yes
+  vars:
+   - mediawikiIP: "{{ hostvars['mediawiki.example.com']['ansible_eth1']['ipv4']['address'] }}"
+  roles:
+   - mysql

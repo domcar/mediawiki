@@ -18,14 +18,16 @@
 - name: allow IP von Mediaserver to MySql
   mysql_user: login_user=root login_password=ciao user=root host={{ mediawikiIP }} password=ciao priv=*.*:ALL state=present
 
+# con questa config. poi posso fare: show master status;
 - name: copy mysql configuration
   template: src=roles/mysql/templates/my.cnf dest=/etc/mysql/my.cnf force=yes mode=0644
   register: MySqlDONE
   notify:
    - Restart Mysql
 
+# con questo user e poi il comando "change master" posso fare: show slave status;
 - name: Create Replicator user
-  mysql_user: name=replicator password=ciao host=% priv="*.*:REPLICATION SLAVE" state=present
+  mysql_user: name={{ replicator }} password={{ password }} host=% priv="*.*:REPLICATION SLAVE" state=present
   notify:
    - Restart Mysql
 

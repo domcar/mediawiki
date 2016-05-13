@@ -1,7 +1,7 @@
 ---
 - include: mediawiki.yml
 
-- include: db1.yml
+- include: db.yml
 
 - include: replica.yml
 
