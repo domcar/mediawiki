@@ -10,13 +10,13 @@
   apt: pkg=python-mysqldb state=installed update_cache=true
 
 - name: set mysql root passwd
-  mysql_user: name=root password=ciao state=present
+  mysql_user: name={{ rootMY }} password={{ rootMYpw }} state=present
 
 - name: make root PW idempotent
   template: src=roles/mysql/templates/.my.cnf.j2 dest=/root/.my.cnf owner=root mode=0600
   
 - name: allow IP von Mediaserver to MySql
-  mysql_user: login_user=root login_password=ciao user=root host={{ mediawikiIP }} password=ciao priv=*.*:ALL state=present
+  mysql_user: login_user={{ rootMY }} login_password={{ rootMYpw }} user=root host={{ mediawikiIP }} password=ehiehi priv=*.*:ALL state=present
 
 # con questa config. poi posso fare: show master status;
 - name: copy mysql configuration
@@ -27,7 +27,7 @@
 
 # con questo user e poi il comando "change master" posso fare: show slave status;
 - name: Create Replicator user
-  mysql_user: name={{ replicator }} password={{ password }} host=% priv="*.*:REPLICATION SLAVE" state=present
+  mysql_user: name={{ replUS }} password={{ replPW }} host=% priv="*.*:REPLICATION SLAVE" state=present
   notify:
    - Restart Mysql
 

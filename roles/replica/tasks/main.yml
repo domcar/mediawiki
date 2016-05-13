@@ -8,8 +8,8 @@
 - name: Stop replication.
   mysql_replication: 
     mode: stopslave
-    login_user: root
-    login_password: ciao
+    login_user: "{{ rootMY }}"
+    login_password: "{{ rootMYpw }}"
   delegate_to: "{{ slave }}"
 
 # da qui in poi posso fare lo show slave status perché qua configuro il master;
@@ -17,8 +17,8 @@
   mysql_replication:
     mode: changemaster
     master_host: "{{ masterIP }}"
-    master_user: replicator 
-    master_password: ciao
+    master_user: "{{ replUS }}"
+    master_password: "{{ replPW }}"
     master_log_file: "{{ master.File }}"
     master_log_pos: "{{ master.Position }}"
   delegate_to: "{{ slave }}"

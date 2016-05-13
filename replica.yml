@@ -8,6 +8,10 @@
    - slave: db1.example.com
    - masterIP: "{{ hostvars['db2.example.com']['ansible_eth1']['ipv4']['address'] }}"
    - master: db2.example.com
+   - replUS: replicator
+   - replPW: ciaociao
+   - rootMY: root
+   - rootMYpw: ehiehi
   roles:
    - replica
 
@@ -19,6 +23,10 @@
    - master: db1.example.com
    - slaveIP: "{{ hostvars['db2.example.com']['ansible_eth1']['ipv4']['address'] }}"
    - slave: db2.example.com
+   - replUS: replicator
+   - replPW: ciaociao
+   - rootMY: root
+   - rootMYpw: ehiehi
   roles:
    - replica
 

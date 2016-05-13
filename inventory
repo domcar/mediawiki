@@ -4,6 +4,6 @@ mediawiki.example.com ansible_ssh_host=127.0.0.1 ansible_ssh_port=2222 ansible_s
 
 
 [databases]
-db2.example.com ansible_ssh_host=127.0.0.1 ansible_ssh_port=2201 ansible_ssh_user='vagrant' ansible_ssh_private_key_file='/home/domenico/redundant/.vagrant/machines/db2.example.com/virtualbox/private_key' ha_priority=100 server_id=2 replicator=replicator password=ciao
-db1.example.com ansible_ssh_host=127.0.0.1 ansible_ssh_port=2200 ansible_ssh_user='vagrant' ansible_ssh_private_key_file='/home/domenico/redundant/.vagrant/machines/db1.example.com/virtualbox/private_key' ha_priority=150 server_id=1 replicator=replicator password=ciao
+db2.example.com ansible_ssh_host=127.0.0.1 ansible_ssh_port=2201 ansible_ssh_user='vagrant' ansible_ssh_private_key_file='/home/domenico/redundant/.vagrant/machines/db2.example.com/virtualbox/private_key' ha_priority=100 server_id=2
+db1.example.com ansible_ssh_host=127.0.0.1 ansible_ssh_port=2200 ansible_ssh_user='vagrant' ansible_ssh_private_key_file='/home/domenico/redundant/.vagrant/machines/db1.example.com/virtualbox/private_key' ha_priority=150 server_id=1
 
