@@ -1,10 +1,4 @@
 ---
-- name: Restart keepalivedDB1
+- name: Restart keepalivedDB
   service: name=keepalived state=restarted
-  delegate_to: db1.example.com
-
-- name: Restart keepalivedDB2
-  service: name=keepalived state=restarted
-  delegate_to: db2.example.com
-
 

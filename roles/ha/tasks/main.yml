@@ -2,7 +2,7 @@
 - name: Install keepalived
   apt: pkg=keepalived state=installed update_cache=true
 
-- name: copy keepalived conf in DB1
+- name: copy keepalived conf in DB
   template: src=keepalived.conf dest=/etc/keepalived/keepalived.conf
   notify:
-    - Restart keepaliveDB1   
+    - Restart keepalivedDB 
