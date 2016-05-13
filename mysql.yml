@@ -1,5 +1,5 @@
 ---
-- hosts: databases
+- hosts: db1.example.com
   user: vagrant
   sudo: yes
   vars:
@@ -8,15 +8,19 @@
    - replPW: ciaociao 
    - rootMY: root
    - rootMYpw: ehiehi
+   - server_id: 1
   roles:
    - mysql
 
-#- hosts: db2.example.com
-#  user: vagrant
-#  sudo: yes
-#  vars:
-#   - mediawikiIP: "{{ hostvars['mediawiki.example.com']['ansible_eth1']['ipv4']['address'] }}"
-#   - replUS: replicator
-#   - replPW: ciao
-#  roles:
-#   - mysql
+- hosts: db2.example.com
+  user: vagrant
+  sudo: yes
+  vars:
+   - mediawikiIP: "{{ hostvars['mediawiki.example.com']['ansible_eth1']['ipv4']['address'] }}"
+   - replUS: replicator
+   - replPW: ciaociao
+   - rootMY: root
+   - rootMYpw: ehiehi
+   - server_id: 2
+  roles:
+   - mysql

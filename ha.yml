@@ -1,6 +1,16 @@
 ---
-- hosts: databases
+- hosts: db1.example.com
   user: vagrant
   sudo: yes
+  vars:
+   - ha_priority: 150
+  roles:
+   - ha
+
+- hosts: db2.example.com
+  user: vagrant
+  sudo: yes
+  vars:
+   - ha_priority: 100
   roles:
    - ha
