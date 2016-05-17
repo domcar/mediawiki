@@ -3,6 +3,6 @@
 
 - include: mysql.yml
 
-- include: replica.yml
+- include: replication.yml
 
 - include: ha.yml
