@@ -4,6 +4,12 @@
 # order to let the ansible part of vagrant dynamically build up its inventory.
 
 - hosts: all
+  gather_facts: no
+  pre_tasks:
+    - name: Resolve ansible dependencies on Ubuntu 
+      raw: if [[ $(cat /etc/*-release |grep PRETTY | awk -F "\"" '{print $2}' | awk  '{print $1$2}') == Ubuntu16* ]]; then sudo apt-get install -y python2.7 python-simplejson; fi
+ 
+- hosts: all
   tasks:
     - ping:
 
