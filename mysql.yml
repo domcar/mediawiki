@@ -3,7 +3,6 @@
   user: vagrant
   sudo: yes
   vars:
-#   - mediawikiIP: "{{ hostvars['mediawiki.example.com']['ansible_eth1']['ipv4']['address'] }}"
    - replUS: replicator
    - replPW: ciaociao 
    - rootMY: root
@@ -16,7 +15,6 @@
   user: vagrant
   sudo: yes
   vars:
-#   - mediawikiIP: "{{ hostvars['mediawiki.example.com']['ansible_eth1']['ipv4']['address'] }}"
    - replUS: replicator
    - replPW: ciaociao
    - rootMY: root
