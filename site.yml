@@ -1,0 +1,8 @@
+---
+- include: mediawiki.yml
+
+- include: mysql.yml
+
+- include: replication.yml
+
+- include: ha.yml

@@ -1,0 +1,7 @@
+---
+- hosts: mediawiki.example.com
+  user: vagrant
+  sudo: yes
+  roles:
+   - apache
+   - mediawiki

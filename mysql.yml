@@ -1,0 +1,24 @@
+---
+- hosts: db1.example.com
+  user: vagrant
+  sudo: yes
+  vars:
+   - replUS: replicator
+   - replPW: ciaociao 
+   - rootMY: root
+   - rootMYpw: ehiehi
+   - server_id: 1
+  roles:
+   - mysql
+
+- hosts: db2.example.com
+  user: vagrant
+  sudo: yes
+  vars:
+   - replUS: replicator
+   - replPW: ciaociao
+   - rootMY: root
+   - rootMYpw: ehiehi
+   - server_id: 2
+  roles:
+   - mysql
